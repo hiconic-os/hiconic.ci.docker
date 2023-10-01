@@ -1,0 +1,46 @@
+# Use the official Ubuntu image as the base
+FROM ghcr.io/hiconic-os/ci-base/main:latest
+
+# Metadata as described above
+LABEL maintainer="your-email@example.com"
+LABEL version="1.0"
+LABEL description="Hiconic CI/CD image based on Ubuntu with devrock-sdk"
+
+#############################
+# Prepare Devrock-SDK
+#############################
+
+# Copy myfile.txt from your machine to the /app directory in the container
+COPY build/devrock-sdk.zip /devrock-sdk.zip
+
+RUN unzip /devrock-sdk.zip -d /
+
+RUN rm /devrock-sdk.zip
+
+ENV DEVROCK_SDK_HOME=/devrock-sdk
+ENV PATH=${PATH}:/devrock-sdk/tools/jinni/bin
+
+#############################
+# Prefetch gradle deps
+#############################
+
+ARG OPENTF_REPO_USER
+ARG OPENTF_REPO_PASSWORD
+
+RUN mkdir /gradle-prefetch
+
+COPY res/build.gradle /gradle-prefetch
+COPY res/buildscript.gradle /gradle-prefetch
+
+WORKDIR /gradle-prefetch
+
+RUN dr tasks
+
+#############################
+# Finalize
+#############################
+
+RUN rm -rf /var/lib/apt/lists/*
+
+# Set the default command for the container (this can be overridden)
+CMD [ "bash" ]

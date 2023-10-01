@@ -1,0 +1,51 @@
+plugins {
+    id 'base'
+}
+
+repositories {
+    maven {
+        url "https://artifactory.braintribe.com/artifactory/core-dev/"
+        credentials {
+            username System.getenv('OPENTF_REPO_USER')
+            password System.getenv('OPENTF_REPO_PASSWORD')
+        }
+    }
+}
+
+configurations {
+    customArtifact {
+        transitive = false
+    }
+}
+
+dependencies {
+    customArtifact 'tribefire.extension.setup:devrock-sdk:2.1.+@zip'
+}
+
+task downloadDevrockSdk(type: Copy) {
+    from configurations.customArtifact
+    into "build"
+    rename { fileName -> "devrock-sdk.zip" }
+}
+
+task buildBaseImage(type: Exec) {
+    commandLine ('docker', 'build', 
+        "-t", "ghcr.io/hiconic-os/ci-base/main:latest",
+        "-f", "Dockerfile-base",
+        "."
+    )
+}
+
+task buildDevrockImage(type: Exec) {
+    commandLine ('docker', 'build', 
+        "--build-arg", "OPENTF_REPO_USER=${System.getenv('OPENTF_REPO_USER')}",
+        "--build-arg", "OPENTF_REPO_PASSWORD=${System.getenv('OPENTF_REPO_PASSWORD')}",
+        "-t", "ghcr.io/hiconic-os/ci-devrock-sdk/main:latest",
+        "-f", "Dockerfile-devrock-sdk",
+        "."
+    )
+}
+
+task buildAll(type: GradleBuild) {
+    tasks = ['downloadDevrockSdk', 'buildBaseImage', 'buildDevrockImage']
+}

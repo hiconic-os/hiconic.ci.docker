@@ -1,0 +1,28 @@
+# Use the official Ubuntu image as the base
+FROM ubuntu:latest
+
+# Metadata as described above
+LABEL maintainer="your-email@example.com"
+LABEL version="1.0"
+LABEL description="Hiconic CI/CD base image based on Ubuntu"
+
+#############################
+# Install tools
+#############################
+
+RUN apt-get update
+
+# Update and install basic tools and Java (OpenJDK)
+RUN apt-get install -y \
+    openjdk-17-jdk \
+    git \
+    unzip
+
+#############################
+# Finalize
+#############################
+
+RUN rm -rf /var/lib/apt/lists/*
+
+# Set the default command for the container (this can be overridden)
+CMD [ "bash" ]
