@@ -42,5 +42,9 @@ RUN dr tasks
 
 RUN rm -rf /var/lib/apt/lists/*
 
+RUN echo $SHELL
+
 # Set the default command for the container (this can be overridden)
-CMD [ "bash" ]
+SHELL ["/bin/bash", "-c"]
+
+RUN echo $SHELL
