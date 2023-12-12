@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_TAG: ghcr.io/hiconic-os/ci-base/${{ github.ref_name }}:latest
+      IMAGE_LATEST_TAG: ghcr.io/hiconic-os/ci-base/${{ github.ref_name }}:latest
+      IMAGE_SNAPSHOT_TAG: ghcr.io/hiconic-os/ci-base-snapshot/${{ github.ref_name }}:${{ github.run_number }}
 
     steps:
       - name: Checkout code
@@ -20,8 +21,13 @@ jobs:
       - name: Login to GitHub Packages
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker image
-        run: gradle buildBaseImage
-    
-      - name: Push Docker image
-        run: docker push ${{ env.IMAGE_TAG }}
+      - name: Build Docker Image
+        run: gradle buildBaseImage -Pbranch=${{ github.ref_name }}
+
+      - name: Push Docker Image
+        run: docker push ${{ env.IMAGE_LATEST_TAG }}
+
+      - name: Push Backup Docker Image
+        run: |
+          docker tag ${{ env.IMAGE_LATEST_TAG }} ${{ env.IMAGE_SNAPSHOT_TAG }}
+          docker push ${{ env.IMAGE_SNAPSHOT_TAG }}

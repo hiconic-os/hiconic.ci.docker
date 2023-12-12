@@ -4,7 +4,7 @@
 
 Contains:
 * **Dockerfile** for an image to run `Hiconic` pipelines (with `devrock-sdk`)
-* **Github action** to build and push a fresh image to Github's `Container Registry`
+* **GitHub action** to build and push a fresh image to GitHub's `Container Registry`
 
 There are actually two Docker🐋 images:
 * **base**: based on `Ubuntu`, with `Git` and `Java` installed
@@ -14,7 +14,7 @@ There are actually two Docker🐋 images:
 
 ## How to build
 
-To build a new image trigger the right `Github action` manually:
+To build a new image trigger the right `GitHub action` manually:
 * **Build Image - Base**
 * **Build Image - Devrock SDK**
 
@@ -34,7 +34,20 @@ To pull the Devrock SDK image from the `main` branch use:
 docker pull ghcr.io/hiconic-os/ci-devrock-sdk/main:latest
 ```
 
-To use it from a workflow yml use:
+To use it from a workflow YAML use:
 ```
 container: ghcr.io/hiconic-os/ci-devrock-sdk/main:latest
 ```
+
+## Older versions
+
+Older versions of both images are published using the following tag schemas:
+
+```
+ghcr.io/hiconic-os/ci-base-snapshot/${branch}:${buildNumber}
+ghcr.io/hiconic-os/ci-devrock-sdk-snapshot/${branch}:${buildNumber}
+```
+
+Snapshots for `main` branch:
+* [Base](https://github.com/hiconic-os/hiconic.ci.docker/pkgs/container/ci-base-snapshot%2Fmain)
+* [Devrock SDK](https://github.com/hiconic-os/hiconic.ci.docker/pkgs/container/ci-devrock-sdk-snapshot%2Fmain)

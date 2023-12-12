@@ -29,18 +29,20 @@ task downloadDevrockSdk(type: Copy) {
 }
 
 task buildBaseImage(type: Exec) {
+    def branch = project.hasProperty("branch") ? project.branch : "main";
     commandLine ('docker', 'build', 
-        "-t", "ghcr.io/hiconic-os/ci-base/main:latest",
+        "-t", "ghcr.io/hiconic-os/ci-base/${branch}:latest",
         "-f", "Dockerfile-base",
         "."
     )
 }
 
 task buildDevrockImage(type: Exec) {
+    def branch = project.hasProperty("branch") ? project.branch : "main";
     commandLine ('docker', 'build', 
         "--build-arg", "OPENTF_REPO_USER=${System.getenv('OPENTF_REPO_USER')}",
         "--build-arg", "OPENTF_REPO_PASSWORD=${System.getenv('OPENTF_REPO_PASSWORD')}",
-        "-t", "ghcr.io/hiconic-os/ci-devrock-sdk/main:latest",
+        "-t", "ghcr.io/hiconic-os/ci-devrock-sdk/${branch}:latest",
         "-f", "Dockerfile-devrock-sdk",
         "."
     )
