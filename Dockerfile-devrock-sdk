@@ -24,8 +24,7 @@ ENV PATH=${PATH}:/devrock-sdk/tools/jinni/bin
 # Prefetch gradle deps
 #############################
 
-ARG OPENTF_REPO_USER
-ARG OPENTF_REPO_PASSWORD
+ARG GITHUB_READ_PACKAGES_TOKEN
 
 RUN mkdir /gradle-prefetch
 

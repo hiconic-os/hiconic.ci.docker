@@ -44,9 +44,14 @@ container: ghcr.io/hiconic-os/ci-devrock-sdk/main:latest
 Older versions of both images are published using the following tag schemas:
 
 ```
-ghcr.io/hiconic-os/ci-base-snapshot/${branch}:${buildNumber}
-ghcr.io/hiconic-os/ci-devrock-sdk-snapshot/${branch}:${buildNumber}
+ghcr.io/hiconic-os/ci-base-snapshot/${branch}:${runNumber}
+ghcr.io/hiconic-os/ci-devrock-sdk-snapshot/${branch}:${runNumber}
 ```
+
+To set an older version as the latest, run:
+* **Restore Image - Devrock SDK**
+
+You need to enter the version (run number) as input. Note that the run number is visible in the workflow runs list.
 
 Snapshots for `main` branch:
 * [Base](https://github.com/hiconic-os/hiconic.ci.docker/pkgs/container/ci-base-snapshot%2Fmain)

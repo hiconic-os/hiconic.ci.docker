@@ -11,8 +11,7 @@ jobs:
       IMAGE_LATEST_TAG: ghcr.io/hiconic-os/ci-devrock-sdk/${{ github.ref_name }}:latest
       IMAGE_SNAPSHOT_TAG: ghcr.io/hiconic-os/ci-devrock-sdk-snapshot/${{ github.ref_name }}:${{ github.run_number }}
 
-      OPENTF_REPO_USER: ${{ secrets.OPENTF_REPO_USER }}
-      OPENTF_REPO_PASSWORD: ${{ secrets.OPENTF_REPO_PASSWORD }}
+      GITHUB_READ_PACKAGES_TOKEN: ${{ secrets.DEVROCK_PIPELINE_UPLOAD_PASSWORD }}
 
     steps:
       - name: Checkout code

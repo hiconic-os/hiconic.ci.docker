@@ -4,10 +4,10 @@ plugins {
 
 repositories {
     maven {
-        url "https://artifactory.braintribe.com/artifactory/core-dev/"
+        url "https://maven.pkg.github.com/hiconic-os/maven-repo-dev"
         credentials {
-            username System.getenv('OPENTF_REPO_USER')
-            password System.getenv('OPENTF_REPO_PASSWORD')
+            username 'not-needed'
+            password System.getenv('GITHUB_READ_PACKAGES_TOKEN')
         }
     }
 }
@@ -40,8 +40,7 @@ task buildBaseImage(type: Exec) {
 task buildDevrockImage(type: Exec) {
     def branch = project.hasProperty("branch") ? project.branch : "main";
     commandLine ('docker', 'build', 
-        "--build-arg", "OPENTF_REPO_USER=${System.getenv('OPENTF_REPO_USER')}",
-        "--build-arg", "OPENTF_REPO_PASSWORD=${System.getenv('OPENTF_REPO_PASSWORD')}",
+        "--build-arg", "GITHUB_READ_PACKAGES_TOKEN=${System.getenv('GITHUB_READ_PACKAGES_TOKEN')}",
         "-t", "ghcr.io/hiconic-os/ci-devrock-sdk/${branch}:latest",
         "-f", "Dockerfile-devrock-sdk",
         "."
