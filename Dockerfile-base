@@ -26,7 +26,7 @@ RUN apt-get install -y \
 
 ENV JDK_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu21.30.15-ca-jdk21.0.1-linux_x64.tar.gz
                      
-RUN curl --fail --output archive.tar.gz --location ${JDK_DOWNLOAD_URL} && \
+RUN curl --fail --retry 3 --output archive.tar.gz --location ${JDK_DOWNLOAD_URL} && \
 	mkdir -p /opt/java/jdk && \
 	tar -C /opt/java/jdk --strip 1 -xvzf archive.tar.gz && \
 	rm archive.tar.gz
@@ -41,7 +41,7 @@ ENV PATH=${JAVA_HOME}/bin:${PATH}
 
 ENV JDK_8_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu8.74.0.17-ca-jdk8.0.392-linux_x64.tar.gz
 
-RUN curl --fail --output archive.tar.gz --location ${JDK_8_DOWNLOAD_URL} && \
+RUN curl --fail --retry 3 --output archive.tar.gz --location ${JDK_8_DOWNLOAD_URL} && \
 	mkdir -p /opt/java/jdk8 && \
 	tar -C /opt/java/jdk8 --strip 1 -xvzf archive.tar.gz && \
 	rm archive.tar.gz
