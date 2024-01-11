@@ -1,5 +1,5 @@
 # Use the official Ubuntu image as the base
-FROM ghcr.io/hiconic-os/ci-base/main:latest
+FROM ghcr.io/hiconic-os/ci-base/main:latest AS before-prefetch
 
 # Metadata as described above
 LABEL maintainer="your-email@example.com"
@@ -24,6 +24,8 @@ ENV PATH=${PATH}:/devrock-sdk/tools/jinni/bin
 # Prefetch gradle deps
 #############################
 
+FROM before-prefetch AS prefetch
+
 ARG GITHUB_READ_PACKAGES_TOKEN
 
 RUN mkdir /gradle-prefetch
@@ -33,11 +35,15 @@ COPY res/buildscript.gradle /gradle-prefetch
 
 WORKDIR /gradle-prefetch
 
-RUN dr tasks
+RUN dr tasks --no-daemon
 
 #############################
 # Finalize
 #############################
+
+FROM before-prefetch
+
+COPY --from=prefetch /root/.gradle /root/.gradle
 
 RUN rm -rf /var/lib/apt/lists/*
 
