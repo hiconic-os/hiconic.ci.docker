@@ -1,0 +1,39 @@
+name: Build Image - Hiconic SDK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_LATEST_TAG: ghcr.io/hiconic-os/ci-hiconic-sdk/${{ github.ref_name }}:latest
+      IMAGE_SNAPSHOT_TAG: ghcr.io/hiconic-os/ci-hiconic-sdk-snapshot/${{ github.ref_name }}:${{ github.run_number }}
+
+      # needed to download hiconic-sdk
+      GITHUB_READ_PACKAGES_TOKEN: ${{ secrets.DEVROCK_PIPELINE_UPLOAD_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Packages
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Download Hiconic SDK
+        run: gradle downloadHiconicSdk
+
+      - name: Build Docker Image
+        run: gradle buildHiconicImage -Pbranch=${{ github.ref_name }}
+    
+      - name: Push Docker Image
+        run: docker push ${{ env.IMAGE_LATEST_TAG }}
+
+      - name: Push Backup Docker Image
+        run: |
+          docker tag ${{ env.IMAGE_LATEST_TAG }} ${{ env.IMAGE_SNAPSHOT_TAG }}
+          docker push ${{ env.IMAGE_SNAPSHOT_TAG }}

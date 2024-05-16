@@ -13,19 +13,29 @@ repositories {
 }
 
 configurations {
-    customArtifact {
+    devrockSdk {
+        transitive = false
+    }
+    hiconicSdk {
         transitive = false
     }
 }
 
 dependencies {
-    customArtifact 'tribefire.extension.setup:devrock-sdk:2.1.+@zip'
+    devrockSdk 'tribefire.extension.setup:devrock-sdk:2.1.+@zip'
+    hiconicSdk 'tribefire.extension.setup:hiconic-sdk:2.1.+@zip'
 }
 
 task downloadDevrockSdk(type: Copy) {
-    from configurations.customArtifact
+    from configurations.devrockSdk
     into "build"
     rename { fileName -> "devrock-sdk.zip" }
+}
+
+task downloadHiconicSdk(type: Copy) {
+    from configurations.hiconicSdk
+    into "build"
+    rename { fileName -> "hiconic-sdk.zip" }
 }
 
 task buildBaseImage(type: Exec) {
@@ -47,6 +57,15 @@ task buildDevrockImage(type: Exec) {
     )
 }
 
+task buildHiconicImage(type: Exec) {
+    def branch = project.hasProperty("branch") ? project.branch : "main";
+    commandLine ('docker', 'build', 
+        "-t", "ghcr.io/hiconic-os/ci-hiconic-sdk/${branch}:latest",
+        "-f", "Dockerfile-hiconic-sdk",
+        "."
+    )
+}
+
 task buildAll(type: GradleBuild) {
-    tasks = ['downloadDevrockSdk', 'buildBaseImage', 'buildDevrockImage']
+    tasks = ['downloadHiconicSdk', 'buildBaseImage', 'buildHiconicImage']
 }
