@@ -13,23 +13,13 @@ repositories {
 }
 
 configurations {
-    devrockSdk {
-        transitive = false
-    }
     hiconicSdk {
         transitive = false
     }
 }
 
 dependencies {
-    devrockSdk 'tribefire.extension.setup:devrock-sdk:2.1.+@zip'
     hiconicSdk 'tribefire.extension.setup:hiconic-sdk:2.1.+@zip'
-}
-
-task downloadDevrockSdk(type: Copy) {
-    from configurations.devrockSdk
-    into "build"
-    rename { fileName -> "devrock-sdk.zip" }
 }
 
 task downloadHiconicSdk(type: Copy) {
@@ -43,16 +33,6 @@ task buildBaseImage(type: Exec) {
     commandLine ('docker', 'build', 
         "-t", "ghcr.io/hiconic-os/ci-base/${branch}:latest",
         "-f", "Dockerfile-base",
-        "."
-    )
-}
-
-task buildDevrockImage(type: Exec) {
-    def branch = project.hasProperty("branch") ? project.branch : "main";
-    commandLine ('docker', 'build', 
-        "--build-arg", "GITHUB_READ_PACKAGES_TOKEN=${System.getenv('GITHUB_READ_PACKAGES_TOKEN')}",
-        "-t", "ghcr.io/hiconic-os/ci-devrock-sdk/${branch}:latest",
-        "-f", "Dockerfile-devrock-sdk",
         "."
     )
 }
