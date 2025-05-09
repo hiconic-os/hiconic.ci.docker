@@ -16,6 +16,7 @@ RUN apt-get update
 RUN apt-get install -y \
 #    openjdk-21-jdk \
     curl \
+	docker.io \
     git \
     unzip \
     lftp \
