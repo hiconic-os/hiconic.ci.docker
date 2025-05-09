@@ -52,7 +52,7 @@ To set an older version as the latest, run:
 * **Restore Image - Hiconic SDK**
 
 You need to enter the version (run number) as input. Note that the run number is visible in the [workflow runs list](https://github.com/hiconic-os/hiconic.ci.docker/actions), e.g.
-> Build Image - Devrock SDK #420: Manually run by codejunkie
+> Build Image - Hiconic SDK #420: Manually run by codejunkie
 
 Snapshots for `main` branch:
 * [Base](https://github.com/hiconic-os/hiconic.ci.docker/pkgs/container/ci-base-snapshot%2Fmain)
