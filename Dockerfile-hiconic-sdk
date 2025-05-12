@@ -16,6 +16,8 @@ RUN unzip /hiconic-sdk.zip -d /
 
 RUN rm /hiconic-sdk.zip
 
+RUN ls -la /hiconic-sdk/tools/shared-lib
+
 ENV DEVROCK_SDK_HOME=/hiconic-sdk
 ENV HICONIC_SDK_HOME=/hiconic-sdk
 ENV PATH=${PATH}:/hiconic-sdk/tools/jinni/bin
