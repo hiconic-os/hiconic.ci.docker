@@ -1,4 +1,4 @@
-name: Build Image - Base
+name: Build Image - CI Base
 
 on:
   workflow_dispatch:

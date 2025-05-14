@@ -1,4 +1,4 @@
-name: Build Image - Hiconic SDK
+name: Build Image - CI Hiconic SDK
 
 on:
   workflow_dispatch:
