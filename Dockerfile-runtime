@@ -1,0 +1,39 @@
+# Use the official Ubuntu image as the base
+FROM ubuntu:latest
+
+#############################
+# Install tools
+#############################
+
+RUN apt-get update
+
+# Update and install basic tools and Java (OpenJDK)
+RUN apt-get install -y \
+#    openjdk-21-jdk \
+    curl \
+    unzip \
+    locales
+
+#
+# Set the locale to UTF-8
+#
+
+RUN locale-gen en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+#
+# Java 21
+#
+
+ENV JDK_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu21.30.15-ca-jdk21.0.1-linux_x64.tar.gz
+                     
+RUN curl --fail --retry 3 --output archive.tar.gz --location ${JDK_DOWNLOAD_URL} && \
+	mkdir -p /opt/java/jdk && \
+	tar -C /opt/java/jdk --strip 1 -xvzf archive.tar.gz && \
+	rm archive.tar.gz
+
+ENV JAVA_HOME=/opt/java/jdk
+ENV JAVA_OPTS=-Xmx4g
+ENV PATH=${JAVA_HOME}/bin:${PATH}
