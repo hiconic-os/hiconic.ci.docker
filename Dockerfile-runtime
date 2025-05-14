@@ -27,9 +27,9 @@ ENV LC_ALL=en_US.UTF-8
 # Java 21
 #
 
-ENV JDK_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu21.30.15-ca-jdk21.0.1-linux_x64.tar.gz
-                     
-RUN curl --fail --retry 3 --output archive.tar.gz --location ${JDK_DOWNLOAD_URL} && \
+ENV JRE_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jre21.0.7-linux_x64.tar.gz
+
+RUN curl --fail --retry 3 --output archive.tar.gz --location ${JRE_DOWNLOAD_URL} && \
 	mkdir -p /opt/java/jdk && \
 	tar -C /opt/java/jdk --strip 1 -xvzf archive.tar.gz && \
 	rm archive.tar.gz
