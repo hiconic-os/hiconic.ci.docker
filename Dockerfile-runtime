@@ -27,7 +27,9 @@ ENV LC_ALL=en_US.UTF-8
 # Java 21
 #
 
-ENV JRE_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jre21.0.7-linux_x64.tar.gz
+# ENV JRE_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu21.42.19-ca-jre21.0.7-linux_x64.tar.gz
+# temporarily switched to amazon-corretto JDK as azul does not support JDK 24 at this time and corretto does not distinguish between JDK and JRE
+ENV JRE_DOWNLOAD_URL=https://github.com/corretto/corretto-24/releases/download/24.0.2.12.1/amazon-corretto-24.0.2.12.1-linux-x64.tar.gz
 
 RUN curl --fail --retry 3 --output archive.tar.gz --location ${JRE_DOWNLOAD_URL} && \
 	mkdir -p /opt/java/jdk && \
