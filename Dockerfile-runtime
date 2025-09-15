@@ -27,7 +27,7 @@ ENV LC_ALL=en_US.UTF-8
 # Java 24
 #
 
-ENV JRE_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu24.32.13-ca-jre24.0.2-linux_x64.zip
+ENV JRE_DOWNLOAD_URL=https://cdn.azul.com/zulu/bin/zulu24.32.13-ca-jre24.0.2-linux_x64.tar.gz
 
 RUN curl --fail --retry 3 --output archive.tar.gz --location ${JRE_DOWNLOAD_URL} && \
 	mkdir -p /opt/java/jdk && \
