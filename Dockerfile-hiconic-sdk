@@ -7,6 +7,18 @@ LABEL version="1.0"
 LABEL description="Hiconic CI/CD image based on Ubuntu with hiconic-sdk"
 
 #############################
+# Install tools
+#############################
+
+RUN apt-get update
+
+# install xmlint
+RUN apt-get install -y libxml2-utils
+
+# install yq (Go based)
+RUN curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq && chmod +x /usr/local/bin/yq
+
+#############################
 # Prepare Hiconic-SDK
 #############################
 
