@@ -10,13 +10,38 @@ LABEL description="Hiconic CI/CD image based on Ubuntu with hiconic-sdk"
 # Install tools
 #############################
 
-RUN apt-get update
+ARG NODE_VERSION=24.18.0
+ARG TARGETARCH
 
-# install xmlint
-RUN apt-get install -y libxml2-utils
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libxml2-utils xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 
 # install yq (Go based)
 RUN curl -L https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/local/bin/yq && chmod +x /usr/local/bin/yq
+
+# Install an exact Node.js toolchain. npm is bundled with Node.js; TypeScript,
+# Vite and other build tools remain versioned devDependencies of each web
+# artifact and are installed through npm ci.
+RUN case "${TARGETARCH:-amd64}" in \
+        amd64) node_arch="x64" ;; \
+        arm64) node_arch="arm64" ;; \
+        *) echo "Unsupported Docker target architecture: ${TARGETARCH}" >&2; exit 1 ;; \
+    esac \
+    && node_dist="node-v${NODE_VERSION}-linux-${node_arch}" \
+    && curl --fail --location --silent --show-error \
+        "https://nodejs.org/dist/v${NODE_VERSION}/${node_dist}.tar.xz" \
+        --output "/tmp/${node_dist}.tar.xz" \
+    && curl --fail --location --silent --show-error \
+        "https://nodejs.org/dist/v${NODE_VERSION}/SHASUMS256.txt" \
+        --output /tmp/node-SHASUMS256.txt \
+    && grep " ${node_dist}.tar.xz\$" /tmp/node-SHASUMS256.txt \
+        | (cd /tmp && sha256sum --check --strict -) \
+    && tar --extract --xz --file "/tmp/${node_dist}.tar.xz" \
+        --directory /usr/local --strip-components=1 \
+    && rm "/tmp/${node_dist}.tar.xz" /tmp/node-SHASUMS256.txt \
+    && node --version \
+    && npm --version
 
 #############################
 # Prepare Hiconic-SDK
@@ -37,8 +62,6 @@ ENV PATH=${PATH}:/hiconic-sdk/tools/jinni/bin
 #############################
 # Finalize
 #############################
-
-RUN rm -rf /var/lib/apt/lists/*
 
 RUN echo $SHELL
 
