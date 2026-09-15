@@ -7,6 +7,10 @@ Contains:
 * **Dockerfile** for an image to run `Hiconic` **CI pipelines** (with `hiconic-sdk`)
 * **GitHub actions** to build and push a fresh image to GitHub's `Container Registry`
 
+Both the application runtime image and the CI base image use Java 25. The
+Proventem server base inherits the application runtime image, so rebuilding it
+propagates the same Java runtime to both CX and RX applications.
+
 As for the `hiconic-sdk` (CI) image, there  There are actually two Docker🐋 images:
 * **ci-base**: based on `Ubuntu`, with `Git` and `Java` installed
 * **ci-hiconic-sdk**: based on the **ci-base** one, with `hiconic-sdk`
