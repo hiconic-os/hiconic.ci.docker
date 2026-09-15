@@ -1,5 +1,6 @@
-# Use the official Ubuntu image as the base
-FROM ubuntu:latest
+# Pin the distribution release so downstream application images keep a stable
+# package repository across rebuilds.
+FROM ubuntu:24.04
 
 #############################
 # Install tools
