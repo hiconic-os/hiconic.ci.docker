@@ -1,5 +1,6 @@
-# Use the official Ubuntu image as the base
-FROM ubuntu:latest
+# Pin the distribution release so package availability cannot change underneath
+# otherwise identical CI image rebuilds.
+FROM ubuntu:24.04
 
 # Metadata as described above
 LABEL maintainer="your-email@example.com"
@@ -78,4 +79,3 @@ RUN echo $SHELL
 SHELL ["/bin/bash", "-c"]
 
 RUN echo $SHELL
-
